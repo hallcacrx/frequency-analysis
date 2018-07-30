@@ -1,0 +1,29 @@
+a=imread('0901070745.jpg');
+a=rgb2gray(a);
+
+M=64;N=64;
+x=1:M;
+y=1:N;
+
+a=imresize(a,[M,N]);
+
+figure,imshow(a);
+imwrite(a,'a.bmp');
+af=dct2(a);
+
+pic_out=zeros(M*N/8,M*N/8);
+
+b=zeros(M,N);
+for u=0:M-1
+    for v=0:N-1
+      dctm=((cos((((2*x)+1)*pi*u)/(2*M)))'*(cos((((2*y)+1)*pi*v)/(2*N))));
+      b=b+af(u+1,v+1)*dctm;
+      if((mod(u,8)==0)&&(mod(v,8)==0))
+          u1=u/8;
+          v1=v/8;
+          pic_out(u1*M+1:(u1+1)*M,v1*N+1:(v1+1)*N)=dctm;
+      end      
+      %imshow(b,[]);
+    end;
+end;
+figure,imshow(pic_out,[])
